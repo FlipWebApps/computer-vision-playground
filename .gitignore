@@ -8,3 +8,5 @@ FacialRecognition/source/shape_predictor_68_face_landmarks.dat
 Audio/Classification/Data/
 .idea/
 Video/Tom and Jerry 3.mp4
+Crowd Counting/CSRNet/__pycache__/
+Crowd Counting/CSRNet/ShanghaiTechDataSet/
