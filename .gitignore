@@ -11,3 +11,6 @@ Video/Tom and Jerry 3.mp4
 Crowd Counting/CSRNet/__pycache__/
 Crowd Counting/CSRNet/ShanghaiTechDataSet/
 object-detection/mask_rcnn_coco.h5
+object-detection/model.h5
+object-detection/yolov3.weights
+object-detection/kangaroo_cfg20190708T1045/events.out.tfevents.1562575522.LT-107232
