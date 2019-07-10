@@ -1,10 +1,11 @@
 *.ipynb_checkpoints*
 logs/
-FacialRecognition/output/
+facial-recognition/architecture-FaceNet/facenet_keras.h5
+facial-recognition/dlib-tensorflow-pipeline/output/
+facial-recognition/dlib-tensorflow-pipeline/source/shape_predictor_68_face_landmarks.dat
 Keras MNIST/logs/
 Keras Unsupervised/results/
 Keras MNIST/Keras MNIST Recognition.Transfer.2.Model.Best.hdf5
-FacialRecognition/source/shape_predictor_68_face_landmarks.dat
 Audio/Classification/Data/
 .idea/
 Video/Tom and Jerry 3.mp4
@@ -14,3 +15,4 @@ object-detection/mask_rcnn_coco.h5
 object-detection/model.h5
 object-detection/yolov3.weights
 object-detection/kangaroo_cfg20190708T1045/events.out.tfevents.1562575522.LT-107232
+object-detection/kangaroo_cfg*
