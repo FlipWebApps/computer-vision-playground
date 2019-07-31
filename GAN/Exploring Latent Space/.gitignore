@@ -1,0 +1,4 @@
+img_align_celeba*
+generated_plot_*.png
+generator_model_*.h5
+!generator_model_030.h5

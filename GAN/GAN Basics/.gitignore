@@ -1,0 +1,3 @@
+*_generated_plot_*.png
+*_generator_model_*.h5
+!*_generator_model_050.h5
