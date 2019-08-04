@@ -191,7 +191,7 @@ class ConditionalGAN(GAN):
                 self.summarize_performance(i+1, 'conditional-gan')
                 
         # save the generator model
-        self.save_model()
+        self.save_model('conditional-gan')
 
     def plot_random_generated_images(self):
         """create a plot of randomly generated images (reversed grayscale)"""
