@@ -1,0 +1,7 @@
+*_generated_plot_*.png
+*_generator_model_*.h5
+*d_model*.h5
+*g_model*.h5
+*gan_model*.h5
+!*_generator_model_050.h5
+__pycache__*
