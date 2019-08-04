@@ -3,5 +3,5 @@
 *d_model*.h5
 *g_model*.h5
 *gan_model*.h5
-!*_generator_model_050.h5
+!*_generator_model_0050.h5
 __pycache__*

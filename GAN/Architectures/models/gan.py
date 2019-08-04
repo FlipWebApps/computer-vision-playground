@@ -107,7 +107,7 @@ class GAN():
         pyplot.close()
         
         # save the generator model
-        filename2 = '{}_model_{:04d}.h5'.format(filename_base, epoch)
+        filename2 = '{}_generator_model_{:04d}.h5'.format(filename_base, epoch)
         self.g_model.save(filename2)
         print('>Saved: %s and %s' % (filename1, filename2))
         
