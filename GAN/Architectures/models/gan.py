@@ -1,3 +1,4 @@
+import fnmatch
 import numpy as np
 
 from IPython.display import SVG
@@ -14,20 +15,22 @@ from matplotlib import pyplot
 class GAN():
     
     def __init__(self, in_shape=(28,28,1), n_classes=10, latent_dim=100):
-        # size of the latent space
         self.in_shape = in_shape
         self.n_classes = n_classes
         self.latent_dim = latent_dim
         self.optimizer = Adam(lr=0.0002, beta_1=0.5) 
-        
+
+        self.step_metrics = None
+        self.epoch_metrics = None
+
         # create the discriminator
-        self.d_model = self.build_discriminator()
+        self.build_discriminator()
         
         # create the generator
-        self.g_model = self.build_generator()
+        self.build_generator()
         
         # create the gan
-        self.gan_model = self.build_gan()
+        self.build_gan()
        
     def build_discriminator(self):
         """define the standalone discriminator model"""
@@ -136,30 +139,45 @@ class GAN():
         #pyplot.savefig(filename)
         #pyplot.close()
     
-    def plot_training_metrics(self, figsize = (10,10)):
+    def plot_training_metrics(self, figsize = (10,10), label_match='*'):
         fig = pyplot.figure(figsize=figsize)
         
-        # plot loss
-        pyplot.subplot(2, 1, 1)
-        pyplot.plot(self.d_loss_real, label='Discriminator Loss (real)')
-        pyplot.plot(self.d_loss_fake, label='Discriminator Loss (fake)')
-        pyplot.plot(self.g_loss, label='Generator Loss')
-        pyplot.legend(loc='upper right')
-        pyplot.title('Losses')
+        if self.step_metrics is None:
+            # plot loss
+            pyplot.subplot(2, 1, 1)
+            pyplot.plot(self.d_loss_real, label='Discriminator Loss (real)')
+            pyplot.plot(self.d_loss_fake, label='Discriminator Loss (fake)')
+            pyplot.plot(self.g_loss, label='Generator Loss')
+            pyplot.legend(loc='upper right')
+            pyplot.title('Losses')
 
-        # plot accuracy
-        pyplot.subplot(2, 1, 2)
-        pyplot.plot(self.d_acc_real, label='Discriminator Accuracy (real)')
-        pyplot.plot(self.d_acc_fake, label='Discriminator Accuracy (fake)')
-        pyplot.ylabel('')
-        pyplot.xlabel('batch')
-        pyplot.legend(loc='upper right')
-        pyplot.title('Accuracies')
+            # plot accuracy
+            pyplot.subplot(2, 1, 2)
+            pyplot.plot(self.d_acc_real, label='Discriminator Accuracy (real)')
+            pyplot.plot(self.d_acc_fake, label='Discriminator Accuracy (fake)')
+            pyplot.ylabel('')
+            pyplot.xlabel('batch')
+            pyplot.legend(loc='upper right')
+            pyplot.title('Accuracies')
 
-        pyplot.tight_layout(rect=[0, 0.00, 1, 0.95])
-        fig.suptitle('GAN Per Batch Training Metrics', fontsize=24)  
-        pyplot.show()
-        
+            pyplot.tight_layout(rect=[0, 0.00, 1, 0.95])
+            fig.suptitle('GAN Per Batch Training Metrics', fontsize=24)  
+            pyplot.show()
+        else:
+            keys = fnmatch.filter(list(self.step_metrics.keys()), label_match)
+            if len(keys) > 0:
+                for key in keys:
+                    pyplot.plot(self.step_metrics[key], label=key)
+                pyplot.ylabel('')
+                pyplot.xlabel('batch')
+                pyplot.legend(loc='upper right')
+                pyplot.title('GAN Per Batch Training Metrics')
+                pyplot.tight_layout(rect=[0, 0.00, 1, 0.95])
+                fig.suptitle('GAN Per Batch Training Metrics', fontsize=24)  
+                pyplot.show()
+            else:
+                print("No matching labels found for {} in {}".format(label_match, self.step_metrics.keys()))
+
         # save plot to file
         # pyplot.savefig('results_baseline/plot_line_plot_loss.png')
         pyplot.close()

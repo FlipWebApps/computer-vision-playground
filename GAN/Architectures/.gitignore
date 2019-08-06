@@ -5,4 +5,5 @@
 *gan_model*.h5
 !*_generator_model_0050.h5
 *ac-gan_generator_model_0050.h5
+infogan_generator_model_0050.h5
 __pycache__*

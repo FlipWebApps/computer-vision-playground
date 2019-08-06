@@ -43,11 +43,10 @@ class ACGAN(ConditionalGAN):
         # class label output
         out2 = Dense(self.n_classes, activation='softmax')(fe)
         # define model
-        model = Model(in_image, [out1, out2])
+        self.d_model = Model(in_image, [out1, out2])
         # compile model
         opt = Adam(lr=0.0002, beta_1=0.5)
-        model.compile(loss=['binary_crossentropy', 'sparse_categorical_crossentropy'], optimizer=opt)
-        return model
+        self.d_model.compile(loss=['binary_crossentropy', 'sparse_categorical_crossentropy'], optimizer=opt)
     
     def build_generator(self):
         """Override building the standalone generator model"""
@@ -79,8 +78,7 @@ class ACGAN(ConditionalGAN):
         gen = Conv2DTranspose(1, (5,5), strides=(2,2), padding='same', kernel_initializer=init)(gen)
         out_layer = Activation('tanh')(gen)
         # define model
-        model = Model([in_lat, in_label], out_layer)
-        return model
+        self.g_model = Model([in_lat, in_label], out_layer)
 
     def build_gan(self):
         """override defining of the combined generator and discriminator model, for updating the generator"""
@@ -89,11 +87,10 @@ class ACGAN(ConditionalGAN):
         # connect the outputs of the generator to the inputs of the discriminator
         gan_output = self.d_model(self.g_model.output)
         # define gan model as taking noise and label and outputting real/fake and label outputs
-        model = Model(self.g_model.input, gan_output)
+        self.gan_model = Model(self.g_model.input, gan_output)
         # compile model
         opt = Adam(lr=0.0002, beta_1=0.5)
-        model.compile(loss=['binary_crossentropy', 'sparse_categorical_crossentropy'], optimizer=opt)
-        return model
+        self.gan_model.compile(loss=['binary_crossentropy', 'sparse_categorical_crossentropy'], optimizer=opt)
 
     def train(self, X, labels, n_epochs=100, n_batch=128, reporting_period=10, n_critic=5):
         """train the generator and discriminator"""

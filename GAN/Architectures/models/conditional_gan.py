@@ -43,11 +43,10 @@ class ConditionalGAN(GAN):
         # output
         out_layer = Dense(1, activation='sigmoid')(fe)
         # define model
-        model = Model([in_image, in_label], out_layer)
+        self.d_model = Model([in_image, in_label], out_layer)
         # compile model
         opt = Adam(lr=0.0002, beta_1=0.5)
-        model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
-        return model
+        self.d_model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
     
     def build_generator(self):
         """define the standalone generator model"""
@@ -78,8 +77,7 @@ class ConditionalGAN(GAN):
         # output
         out_layer = Conv2D(1, (7,7), activation='tanh', padding='same')(gen)
         # define model
-        model = Model([in_lat, in_label], out_layer)
-        return model
+        self.g_model = Model([in_lat, in_label], out_layer)
 
     def build_gan(self):
         """define the combined generator and discriminator model, for updating the generator"""
@@ -92,11 +90,10 @@ class ConditionalGAN(GAN):
         # connect image output and label input from generator as inputs to discriminator
         gan_output = self.d_model([gen_output, gen_label])
         # define gan model as taking noise and label and outputting a classification
-        model = Model([gen_noise, gen_label], gan_output)
+        self.gan_model = Model([gen_noise, gen_label], gan_output)
         # compile model
         opt = Adam(lr=0.0002, beta_1=0.5)
-        model.compile(loss='binary_crossentropy', optimizer=opt)
-        return model  
+        self.gan_model.compile(loss='binary_crossentropy', optimizer=opt)
     
     def generate_real_samples(self, X, labels, n_samples):
         """select real samples"""

@@ -52,9 +52,9 @@ class WGAN(GAN):
         model.add(Flatten())
         model.add(Dense(1))
         # compile model
+        self.d_model = model
         opt = RMSprop(lr=0.00005)
-        model.compile(loss=self.wasserstein_loss, optimizer=opt, metrics=['accuracy'])
-        return model
+        self.d_model.compile(loss=self.wasserstein_loss, optimizer=opt, metrics=['accuracy'])
     
     def build_generator(self):
         """Override building the standalone generator model"""
@@ -77,7 +77,7 @@ class WGAN(GAN):
         model.add(LeakyReLU(alpha=0.2))
         # output 28x28x1
         model.add(Conv2D(1, (7,7), activation='tanh', padding='same', kernel_initializer=init))
-        return model
+        self.g_model = model
 
     def build_gan(self):
         """override defining of the combined generator and critic model, for updating the generator"""
@@ -93,8 +93,8 @@ class WGAN(GAN):
         model.add(critic)
         # compile model
         opt = RMSprop(lr=0.00005)
-        model.compile(loss=self.wasserstein_loss, optimizer=opt)
-        return model
+        self.gan_model = model
+        self.gan_model.compile(loss=self.wasserstein_loss, optimizer=opt)
     
     def generate_real_samples(self, X, n_samples):
         selected_X, _ = super().generate_real_samples(X, n_samples)
